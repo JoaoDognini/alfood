@@ -1,7 +1,7 @@
-import { TableContainer, Paper, Table, TableHead, TableBody, TableRow, TableCell, Button } from "@mui/material";
+import { TableContainer, Paper, Table, TableHead, TableBody, TableRow, TableCell, Button, Link } from "@mui/material";
 import IRestaurante from "../../../interfaces/IRestaurante";
 import { useEffect, useState } from 'react';
-import { Link } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 import http from "../../../http";
 
 export default function AdministracaoRestaurantes() {
@@ -35,7 +35,7 @@ export default function AdministracaoRestaurantes() {
 								{restaurante.nome}
 							</TableCell>
 							<TableCell>
-								<Link to={`/admin/restaurantes/${restaurante.id}`}>Editar</Link>
+								<Link component={RouterLink} to={`/admin/restaurantes/${restaurante.id}`}>Editar</Link>
 							</TableCell>
 							<TableCell>
 								<Button

@@ -1,5 +1,4 @@
 import { TextField, Button, Typography, Box } from '@mui/material'
-import axios from 'axios';
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom';
 import IRestaurante from '../../../interfaces/IRestaurante';
@@ -31,26 +30,28 @@ export default function FormularioRestaurante() {
 	}, [parametros])
 
 	return (
-		<Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-			<Typography component="h1" variant="h6">{`${editarOuCadastrar} restaurante`}</Typography>
-			<Box component='form' onSubmit={(evento: React.FormEvent<HTMLFormElement>) => onSubmitForm(evento)}>
-				<TextField
-					label="Nome do restaurante"
-					variant="standard"
-					value={nomeRestaurante}
-					onChange={evento => setNomeRestaurante(evento.target.value)}
-					fullWidth={true}
-					required
-				/>
-				<Button
-					sx={{ marginTop: 1 }}
-					variant="outlined"
-					type='submit'
-					fullWidth={true}
-				>
-					Salvar
-				</Button>
+		<>
+			<Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+				<Typography component="h1" variant="h6">{`${editarOuCadastrar} restaurante`}</Typography>
+				<Box component='form' sx={{ width: '100%' }} onSubmit={(evento: React.FormEvent<HTMLFormElement>) => onSubmitForm(evento)}>
+					<TextField
+						label="Nome do restaurante"
+						variant="standard"
+						value={nomeRestaurante}
+						onChange={evento => setNomeRestaurante(evento.target.value)}
+						fullWidth={true}
+						required
+					/>
+					<Button
+						sx={{ marginTop: 1 }}
+						variant="outlined"
+						type='submit'
+						fullWidth={true}
+					>
+						Salvar
+					</Button>
+				</Box>
 			</Box>
-		</Box>
+		</>
 	)
 }
