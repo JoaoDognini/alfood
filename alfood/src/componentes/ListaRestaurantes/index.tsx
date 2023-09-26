@@ -2,20 +2,28 @@ import { useEffect, useState } from 'react';
 import IRestaurante from '../../interfaces/IRestaurante';
 import style from './ListaRestaurantes.module.scss';
 import Restaurante from './Restaurante';
-import axios from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
 import { IPaginacao } from '../../interfaces/IPaginacao';
+import { TextField, Button } from '@mui/material';
+
+interface IParametrosBusca {
+	ordering?: string
+	search?: string
+}
 
 const ListaRestaurantes = () => {
 	const [restaurantes, setRestaurantes] = useState<IRestaurante[]>([]);
 	const [proximaPagina, setProximaPagina] = useState('');
 	const [paginaAnterior, setPaginaAnterior] = useState('');
+	const [pesquisa, setPesquisa] = useState('');
 
 	useEffect(() => {
-		carregaRestaurantes('http://localhost:8000/api/v1/restaurantes/')
+		carregaRestaurantes('http://localhost:8000/api/v1/restaurantes/');
+
 	}, [])
 
-	function carregaRestaurantes(url: string) {
-		axios.get<IPaginacao<IRestaurante>>(url)
+	function carregaRestaurantes(url: string, opcoes: AxiosRequestConfig = {}) {
+		axios.get<IPaginacao<IRestaurante>>(url, opcoes)
 			.then(response => {
 				setProximaPagina(response.data.next)
 				setPaginaAnterior(response.data.previous)
@@ -24,8 +32,32 @@ const ListaRestaurantes = () => {
 			.catch(erro => console.log(erro))
 	}
 
+	function buscar(evento: React.FormEvent<HTMLFormElement>) {
+		evento.preventDefault();
+		const opcoes = {
+			params: {
+
+			} as IParametrosBusca
+		}
+		if (pesquisa) {
+			opcoes.params.search = pesquisa
+		}
+		carregaRestaurantes('http://localhost:8000/api/v1/restaurantes/', opcoes)
+	}
+
 	return (<section className={style.ListaRestaurantes}>
 		<h1>Os restaurantes mais <em>bacanas</em>!</h1>
+		<form onSubmit={evento => buscar(evento)}>
+			<div className={style.Pesquisa}>
+				<TextField
+					id="outlined-basic"
+					variant="outlined"
+					value={pesquisa}
+					onChange={(evento) => setPesquisa(evento.target.value)}
+				/>
+				<Button type='submit'>Pesquisar</Button>
+			</div>
+		</form>
 		{restaurantes?.map(item => <Restaurante restaurante={item} key={item.id} />)}
 		{
 			<button onClick={() => carregaRestaurantes(paginaAnterior)} disabled={!paginaAnterior}>
