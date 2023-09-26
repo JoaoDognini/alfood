@@ -1,12 +1,13 @@
-import { TextField, Button } from '@mui/material'
+import { TextField, Button, Typography, Box } from '@mui/material'
 import axios from 'axios';
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom';
 import IRestaurante from '../../../interfaces/IRestaurante';
+import http from '../../../http';
 
 export default function FormularioRestaurante() {
-	const url = 'http://localhost:8000/api/v2/restaurantes/';
 	const parametros = useParams();
+	const editarOuCadastrar = parametros.id ? 'Editar' : 'Cadastrar';
 
 	const [nomeRestaurante, setNomeRestaurante] = useState('')
 
@@ -14,36 +15,42 @@ export default function FormularioRestaurante() {
 		evento.preventDefault();
 
 		if (parametros.id) {
-			axios.put(`${url}${parametros.id}/`, {
+			http.put(`restaurantes/${parametros.id}/`, {
 				nome: nomeRestaurante
-			})
-				.then(() => console.log('Restaurante editado com sucesso!'));
+			}).then(() => console.log('Restaurante editado com sucesso!'));
 		} else {
-			axios.post(url, {
+			http.post('restaurantes/', {
 				nome: nomeRestaurante
-			})
-				.then(() => console.log('Restaurante cadastrado com sucesso!'));
+			}).then(() => console.log('Restaurante cadastrado com sucesso!'));
 		}
 	}
 
 	useEffect(() => {
 		console.log(parametros.id)
-		if (parametros.id) axios.get<IRestaurante>(`${url}${parametros.id}/`).then(response => setNomeRestaurante(response.data.nome));
+		if (parametros.id) http.get<IRestaurante>(`restaurantes/${parametros.id}/`).then(response => setNomeRestaurante(response.data.nome));
 	}, [parametros])
 
 	return (
-		<form onSubmit={evento => onSubmitForm(evento)}>
-			<TextField
-				label="Nome do restaurante"
-				variant="standard"
-				value={nomeRestaurante}
-				onChange={evento => setNomeRestaurante(evento.target.value)}
-			/>
-			<Button
-				variant="outlined"
-				type='submit'>
-				Salvar
-			</Button>
-		</form>
+		<Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+			<Typography component="h1" variant="h6">{`${editarOuCadastrar} restaurante`}</Typography>
+			<Box component='form' onSubmit={(evento: React.FormEvent<HTMLFormElement>) => onSubmitForm(evento)}>
+				<TextField
+					label="Nome do restaurante"
+					variant="standard"
+					value={nomeRestaurante}
+					onChange={evento => setNomeRestaurante(evento.target.value)}
+					fullWidth={true}
+					required
+				/>
+				<Button
+					sx={{ marginTop: 1 }}
+					variant="outlined"
+					type='submit'
+					fullWidth={true}
+				>
+					Salvar
+				</Button>
+			</Box>
+		</Box>
 	)
 }
