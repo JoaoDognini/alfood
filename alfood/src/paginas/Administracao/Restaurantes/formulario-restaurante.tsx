@@ -1,14 +1,18 @@
 import { TextField, Button, Typography, Box } from '@mui/material'
 import { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import IRestaurante from '../../../interfaces/IRestaurante';
 import http from '../../../http';
 
 export default function FormularioRestaurante() {
 	const parametros = useParams();
+	const navigate = useNavigate();
+	const [nomeRestaurante, setNomeRestaurante] = useState('');
 	const editarOuCadastrar = parametros.id ? 'Editar' : 'Cadastrar';
 
-	const [nomeRestaurante, setNomeRestaurante] = useState('')
+	useEffect(() => {
+		if (parametros.id) http.get<IRestaurante>(`restaurantes/${parametros.id}/`).then(response => setNomeRestaurante(response.data.nome));
+	}, [parametros])
 
 	function onSubmitForm(evento: React.FormEvent<HTMLFormElement>) {
 		evento.preventDefault();
@@ -16,18 +20,16 @@ export default function FormularioRestaurante() {
 		if (parametros.id) {
 			http.put(`restaurantes/${parametros.id}/`, {
 				nome: nomeRestaurante
-			}).then(() => console.log('Restaurante editado com sucesso!'));
+			}).then(() => alert('Restaurante editado com sucesso!'))
+				.then(() => navigate('/admin/restaurantes'))
 		} else {
 			http.post('restaurantes/', {
 				nome: nomeRestaurante
-			}).then(() => console.log('Restaurante cadastrado com sucesso!'));
+			}).then(() => alert('Restaurante cadastrado com sucesso!'))
+				.then(() => navigate('/admin/restaurantes'));
 		}
-	}
 
-	useEffect(() => {
-		console.log(parametros.id)
-		if (parametros.id) http.get<IRestaurante>(`restaurantes/${parametros.id}/`).then(response => setNomeRestaurante(response.data.nome));
-	}, [parametros])
+	}
 
 	return (
 		<>

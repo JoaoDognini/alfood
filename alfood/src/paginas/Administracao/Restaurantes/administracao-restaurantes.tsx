@@ -18,6 +18,7 @@ export default function AdministracaoRestaurantes() {
 			setRestaurantes(listaRestaurantes);
 		})
 	}
+
 	return (
 		<TableContainer component={Paper}>
 			<Table>
@@ -25,6 +26,12 @@ export default function AdministracaoRestaurantes() {
 					<TableRow>
 						<TableCell>
 							Nome
+						</TableCell>
+						<TableCell>
+							Descrição
+						</TableCell>
+						<TableCell>
+							Tag
 						</TableCell>
 					</TableRow>
 				</TableHead>

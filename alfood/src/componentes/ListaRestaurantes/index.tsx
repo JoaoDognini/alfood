@@ -30,7 +30,7 @@ const ListaRestaurantes = () => {
 				setPaginaAnterior(response.data.previous)
 				setRestaurantes(response.data.results)
 			})
-			.catch(erro => console.log(erro))
+			.catch(erro => alert(erro))
 	}
 
 	function buscar(evento: React.FormEvent<HTMLFormElement>) {

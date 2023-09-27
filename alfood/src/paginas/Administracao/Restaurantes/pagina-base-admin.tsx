@@ -5,7 +5,7 @@ export default function PaginaBaseAdmin() {
 	return (
 		<>
 			<AppBar position="static">
-				<Container maxWidth="xl" sx={{display: 'flex', alignItems: 'center'}}>
+				<Container maxWidth="xl" sx={{ display: 'flex', alignItems: 'center' }}>
 					<Toolbar>
 						<Typography variant='h6'>
 							Administração
@@ -19,6 +19,16 @@ export default function PaginaBaseAdmin() {
 							<Link component={RouterLink} to="/admin/restaurantes/novo">
 								<Button sx={{ marginY: 2, color: 'white' }}>
 									Novo restaurante
+								</Button>
+							</Link>
+							<Link component={RouterLink} to="/admin/pratos/">
+								<Button sx={{ marginY: 2, color: 'white' }}>
+									Pratos
+								</Button>
+							</Link>
+							<Link component={RouterLink} to="/admin/pratos/novo">
+								<Button sx={{ marginY: 2, color: 'white' }}>
+									Novo prato
 								</Button>
 							</Link>
 						</Box>
